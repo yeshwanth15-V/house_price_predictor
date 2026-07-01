@@ -2,31 +2,60 @@ import streamlit as st
 import pickle
 import numpy as np
 
+# -------------------------
 # Page Configuration
+# -------------------------
 st.set_page_config(
-    page_title="Prediction App",
-    page_icon="📊",
+    page_title="House Price Prediction",
+    page_icon="🏠",
     layout="centered"
 )
 
-# Load Model
+# -------------------------
+# Load Trained Model
+# -------------------------
 with open("model_pickle", "rb") as file:
     model = pickle.load(file)
 
+# -------------------------
 # Title
-st.title("📊 Machine Learning Prediction App")
-st.write("Enter the values below to get the prediction.")
+# -------------------------
+st.title("🏠 House Price Prediction")
+st.write("Enter the house details below to predict the estimated price.")
 
 st.divider()
 
-# Input Fields
-feature1 = st.number_input("Feature 1", value=0.0)
-feature2 = st.number_input("Feature 2", value=0.0)
-feature3 = st.number_input("Feature 3", value=0.0)
+# -------------------------
+# User Inputs
+# -------------------------
+area = st.number_input(
+    "Area (Square Feet)",
+    min_value=100,
+    max_value=10000,
+    value=1414
+)
 
+bathroom = st.number_input(
+    "Number of Bathrooms",
+    min_value=1,
+    max_value=10,
+    value=2
+)
+
+bedroom = st.number_input(
+    "Number of Bedrooms",
+    min_value=1,
+    max_value=10,
+    value=3
+)
+
+# -------------------------
 # Prediction
-if st.button("Predict"):
-    input_data = np.array([[feature1, feature2, feature3]])
+# -------------------------
+if st.button("Predict House Price"):
+
+    input_data = np.array([[area, bathroom, bedroom]])
+
     prediction = model.predict(input_data)
 
-    st.success(f"Prediction: {prediction[0]:.2f}")
+    st.success(f"🏡 Estimated House Price: ₹ {prediction[0]:,.2f}")
